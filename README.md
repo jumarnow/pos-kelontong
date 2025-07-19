@@ -1,28 +1,40 @@
-# Fitur Aplikasi
 
-### Fitur yang Sudah Ada
+<div align="center">
+  <h1>🛒 POS Kelontong</h1>
+  <p><b>Aplikasi Point of Sale (POS) modern untuk toko kelontong berbasis Nuxt 3 + Tailwind CSS</b></p>
+  <img src="https://img.shields.io/badge/Nuxt-3-green?logo=nuxtdotjs" />
+  <img src="https://img.shields.io/badge/TailwindCSS-3-blue?logo=tailwindcss" />
+</div>
 
-- Autentikasi pengguna (login, middleware auth)
-- Manajemen produk (tambah, edit, hapus, lihat daftar produk)
-- Pencarian produk (search)
-- Pagination & limit produk per halaman
-- Manajemen stok produk
-- Keranjang belanja (add, update qty, remove, clear)
-- Checkout transaksi dengan pilihan metode pembayaran (tunai, kartu, transfer)
-- Riwayat transaksi
-- Notifikasi sukses transaksi
-- Responsive & UI modern (Tailwind CSS)
+---
 
-### Fitur yang Akan Dikembangkan
+## ✨ Fitur Aplikasi
 
-- Export data produk & transaksi (CSV/Excel)
-- Laporan penjualan (dashboard statistik)
-- Manajemen user/role (admin/kasir)
-- Integrasi barcode scanner
-- Pengaturan profil toko
-- Cetak struk transaksi
-- Notifikasi stok menipis
-- Multi-user & multi-outlet
+### 🎉 Fitur yang Sudah Ada
+
+- 🔐 Autentikasi pengguna (login, middleware auth)
+- 📦 Manajemen produk (tambah, edit, hapus, lihat daftar produk)
+- 🔍 Pencarian produk (search)
+- 📄 Pagination & limit produk per halaman
+- 📊 Manajemen stok produk
+- 🛒 Keranjang belanja (add, update qty, remove, clear)
+- 💳 Checkout transaksi (tunai, kartu, transfer)
+- 🧾 Riwayat transaksi
+- ✅ Notifikasi sukses transaksi
+- 📱 Responsive & UI modern (Tailwind CSS)
+
+### 🚀 Fitur yang Akan Dikembangkan
+
+- ⬇️ Export data produk & transaksi (CSV/Excel)
+- 📈 Laporan penjualan (dashboard statistik)
+- 👤 Manajemen user/role (admin/kasir)
+- 🏷️ Integrasi barcode scanner
+- 🏪 Pengaturan profil toko
+- 🖨️ Cetak struk transaksi
+- ⚠️ Notifikasi stok menipis
+- 🏬 Multi-user & multi-outlet
+
+---
 
 # Nuxt 3 Minimal Starter
 
