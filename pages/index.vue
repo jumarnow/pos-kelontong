@@ -6,39 +6,23 @@
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-semibold">Pilih Produk</h2>
           <div class="flex items-center space-x-2">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Cari produk atau barcode..."
-              class="input-field w-64"
-              @input="handleSearch"
-            />
-            <button
-              @click="fetchProducts"
-              class="btn-primary"
-            >
+            <input v-model="searchQuery" type="text" placeholder="Cari produk atau barcode..." class="input-field w-64"
+              @input="handleSearch" />
+            <button @click="fetchProducts" class="btn-primary">
               Refresh
             </button>
           </div>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <div
-            v-for="product in filteredProducts"
-            :key="product.id"
-            class="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-            @click="addToCart(product)"
-          >
+          <div v-for="product in filteredProducts" :key="product.id"
+            class="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer" @click="addToCart(product)">
             <div class="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-              <img
-                v-if="product.image_url"
-                :src="product.image_url"
-                :alt="product.name"
-                class="w-full h-full object-cover rounded-lg"
-              />
+              <img v-if="product.image_url" :src="product.image_url" :alt="product.name"
+                class="w-full h-full object-cover rounded-lg" />
               <div v-else class="text-gray-400 text-4xl">📦</div>
             </div>
-            
+
             <h3 class="font-medium text-sm mb-1">{{ product.name }}</h3>
             <p class="text-xs text-gray-500 mb-2">{{ product.category }}</p>
             <div class="flex items-center justify-between">
@@ -51,72 +35,57 @@
             </div>
           </div>
         </div>
-        
+
         <div v-if="loading" class="text-center py-8">
           <div class="text-gray-500">Memuat produk...</div>
         </div>
-        
+
         <div v-if="!loading && filteredProducts.length === 0" class="text-center py-8">
           <div class="text-gray-500">Tidak ada produk ditemukan</div>
         </div>
       </div>
     </div>
-    
+
     <!-- Shopping Cart -->
     <div class="lg:col-span-1">
       <div class="card sticky top-6">
         <h2 class="text-xl font-semibold mb-4">Keranjang Belanja</h2>
-        
+
         <div class="space-y-3 max-h-96 overflow-y-auto">
-          <div
-            v-for="item in cart"
-            :key="item.product.id"
-            class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-          >
+          <div v-for="item in cart" :key="item.product.id"
+            class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
             <div class="flex-1">
               <h4 class="font-medium text-sm">{{ item.product.name }}</h4>
               <p class="text-xs text-gray-500">
                 Rp {{ formatCurrency(item.product.price) }} x {{ item.quantity }}
               </p>
             </div>
-            
+
             <div class="flex items-center space-x-2">
-              <button
-                @click="updateQuantity(item.product.id, item.quantity - 1)"
+              <button @click="updateQuantity(item.product.id, item.quantity - 1)"
                 class="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs"
-                :disabled="item.quantity <= 1"
-              >
+                :disabled="item.quantity <= 1">
                 -
               </button>
-              <input
-                type="number"
-                class="w-12 text-center text-sm border rounded mx-1"
-                :min="1"
-                :max="item.product.stock"
-                :value="item.quantity"
-                @input="onQtyInputInput($event, item)"
-              />
-              <button
-                @click="updateQuantity(item.product.id, item.quantity + 1)"
+              <input type="number" class="w-12 text-center text-sm border rounded mx-1" :min="1"
+                :max="item.product.stock" :value="item.quantity" @input="onQtyInputInput($event, item)" />
+              <button @click="updateQuantity(item.product.id, item.quantity + 1)"
                 class="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs"
-                :disabled="item.quantity >= item.product.stock"
-              >
+                :disabled="item.quantity >= item.product.stock">
                 +
               </button>
-              <button
-                @click="removeFromCart(item.product.id)"
-                class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs ml-2"
-              >
+              <button @click="removeFromCart(item.product.id)"
+                class="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs ml-2">
                 ×
               </button>
             </div>
           </div>
         </div>
-        
+
         <div v-if="cart.length === 0" class="text-center py-8 text-gray-500">
           Keranjang masih kosong
         </div>
-        
+
         <div v-if="cart.length > 0" class="mt-6 pt-4 border-t">
           <div class="flex justify-between items-center mb-4">
             <span class="text-lg font-semibold">Total:</span>
@@ -124,27 +93,20 @@
               Rp {{ formatCurrency(getTotal()) }}
             </span>
           </div>
-          
+
           <div class="space-y-2">
             <select v-model="paymentMethod" class="input-field">
               <option value="cash">Tunai</option>
               <option value="card">Kartu</option>
               <option value="transfer">Transfer</option>
             </select>
-            
-            <button
-              @click="handleCheckout"
-              :disabled="checkoutLoading"
-              class="btn-primary w-full"
-            >
+
+            <button @click="handleCheckout" :disabled="checkoutLoading" class="btn-primary w-full">
               <span v-if="checkoutLoading">Memproses...</span>
               <span v-else>Checkout ({{ getItemCount() }} item)</span>
             </button>
-            
-            <button
-              @click="clearCart"
-              class="btn-outline w-full"
-            >
+
+            <button @click="clearCart" class="btn-outline w-full">
               Bersihkan Keranjang
             </button>
           </div>
@@ -152,7 +114,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Success Modal -->
   <div v-if="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
@@ -162,12 +124,19 @@
         <p class="text-gray-600 mb-4">
           Total: Rp {{ formatCurrency(lastTransaction?.total_amount || 0) }}
         </p>
-        <button
-          @click="showSuccessModal = false"
-          class="btn-primary w-full"
+        <a
+          v-if="lastTransaction?.id"
+          :href="`/print?id=${lastTransaction.id}`"
+          target="_blank"
+          rel="noopener"
+          class="btn-outline w-full mb-2 text-center block"
         >
+          🖨️ Print Invoice
+        </a>
+        <button @click="showSuccessModal = false" class="btn-primary w-full">
           OK
         </button>
+
       </div>
     </div>
   </div>
@@ -213,7 +182,7 @@ function onQtyInputInput(event, item) {
 
 const handleCheckout = async () => {
   const result = await checkout(paymentMethod.value)
-  
+
   if (result.success) {
     lastTransaction.value = result.transaction
     showSuccessModal.value = true
@@ -221,6 +190,7 @@ const handleCheckout = async () => {
     alert('Checkout gagal: ' + result.error)
   }
 }
+
 
 onMounted(async () => {
   await fetchProducts()

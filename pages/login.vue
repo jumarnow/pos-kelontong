@@ -12,7 +12,7 @@
       
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="rounded-md shadow-sm -space-y-px">
-          <div>
+          <div class="mb-3">
             <label for="email" class="sr-only">Email</label>
             <input
               id="email"
@@ -74,8 +74,8 @@ const { user, signIn } = useAuth()
 const router = useRouter()
 
 const form = ref({
-  email: '',
-  password: ''
+  email: 'admin@test.com',
+  password: 'admin@test.com'
 })
 
 const loading = ref(false)
@@ -86,9 +86,6 @@ const handleLogin = async () => {
     error.value = ''
     
     const result = await signIn(form.value.email, form.value.password)
-
-    console.log('Hasil signIn', result)
-
     
     if (result.success) {
       console.log('Login berhasil:', result.user);

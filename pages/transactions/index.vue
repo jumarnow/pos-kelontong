@@ -54,13 +54,22 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ transaction.transaction_items?.length || 0 }} item(s)
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2">
                 <button
                   @click="viewTransaction(transaction)"
-                  class="text-indigo-600 hover:text-indigo-900"
+                  class="btn-outline text-sm"
                 >
                   Detail
                 </button>
+                <a
+                  :href="`/print?id=${transaction.id}`"
+                  target="_blank"
+                  rel="noopener"
+                  class="btn-outline text-sm"
+                  title="Print Invoice"
+                >
+                  Print
+                </a>
               </td>
             </tr>
           </tbody>
@@ -111,7 +120,7 @@
           
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Items</label>
-            <div class="border rounded-lg overflow-hidden">
+            <div class="border rounded-lg overflow-hidden mb-4">
               <table class="min-w-full">
                 <thead class="bg-gray-50">
                   <tr>
@@ -131,6 +140,7 @@
                 </tbody>
               </table>
             </div>
+            <!-- Tombol print dipindah ke kolom aksi tabel utama -->
           </div>
         </div>
       </div>

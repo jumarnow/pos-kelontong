@@ -22,6 +22,7 @@
 - 🧾 Riwayat transaksi
 - ✅ Notifikasi sukses transaksi
 - 📱 Responsive & UI modern (Tailwind CSS)
+- 🖨️ Cetak struk transaksi
 
 ### 🚀 Fitur yang Akan Dikembangkan
 
@@ -30,9 +31,12 @@
 - 👤 Manajemen user/role (admin/kasir)
 - 🏷️ Integrasi barcode scanner
 - 🏪 Pengaturan profil toko
-- 🖨️ Cetak struk transaksi
 - ⚠️ Notifikasi stok menipis
 - 🏬 Multi-user & multi-outlet
+
+### Demo
+https://main-pos-kelontong.wd1ea4.easypanel.host/
+
 
 ---
 
