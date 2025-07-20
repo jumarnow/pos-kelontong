@@ -98,14 +98,26 @@
             </span>
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-2 mb-4">
             <select v-model="paymentMethod" class="input-field">
               <option value="cash">Tunai</option>
               <option value="card">Kartu</option>
               <option value="transfer">Transfer</option>
             </select>
 
-            <button @click="handleCheckout" :disabled="checkoutLoading" class="btn-primary w-full">
+            <div v-if="paymentMethod === 'cash'" class="space-y-1">
+              <label class="block text-sm text-gray-600 mb-1">Uang Diterima</label>
+              <input :value="formatCurrencyInput(cashReceived)" @input="onCashInput($event)" inputmode="numeric"
+                class="input-field w-full" placeholder="Masukkan nominal uang..." />
+              <div v-if="cashReceived > 0" class="text-sm mt-1">
+                <span v-if="cashReceived < getTotal()" class="text-red-500">Uang kurang!</span>
+                <span v-else>Kembalian: <b>Rp {{ formatCurrency(cashReceived - getTotal()) }}</b></span>
+              </div>
+            </div>
+
+            <button @click="handleCheckout"
+              :disabled="checkoutLoading || (paymentMethod === 'cash' && cashReceived < getTotal())"
+              class="btn-primary w-full">
               <span v-if="checkoutLoading">Memproses...</span>
               <span v-else>Checkout ({{ getItemCount() }} item)</span>
             </button>
@@ -154,6 +166,21 @@ const filteredProducts = ref([])
 const paymentMethod = ref('cash')
 const showSuccessModal = ref(false)
 const lastTransaction = ref(null)
+const cashReceived = ref(0)
+
+function formatCurrencyInput(val) {
+  if (val === '' || val === null || val === undefined) return ''
+  const num = Number(val.toString().replace(/\D/g, ''))
+  return num.toLocaleString('id-ID')
+}
+
+function onCashInput(e) {
+  let raw = e.target.value.replace(/\D/g, '')
+  let num = Number(raw)
+  if (isNaN(num)) num = 0
+  cashReceived.value = num
+  e.target.value = formatCurrencyInput(num)
+}
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('id-ID').format(amount)
