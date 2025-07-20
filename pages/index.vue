@@ -15,17 +15,12 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <div
-            v-for="product in filteredProducts"
-            :key="product.id"
-            class="border rounded-lg p-4 transition-shadow"
+          <div v-for="product in filteredProducts" :key="product.id" class="border rounded-lg p-4 transition-shadow"
             :class="[
               product.stock > 0
                 ? 'hover:shadow-md cursor-pointer'
                 : 'bg-gray-100 text-gray-400 opacity-60 cursor-not-allowed pointer-events-none'
-            ]"
-            @click="product.stock > 0 && addToCart(product)"
-          >
+            ]" @click="canAddToCart(product) && addToCart(product)">
             <div class="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
               <img v-if="product.image_url" :src="product.image_url" :alt="product.name"
                 class="w-full h-full object-cover rounded-lg" />
@@ -38,10 +33,7 @@
               <span class="text-primary-600 font-semibold">
                 Rp {{ formatCurrency(product.price) }}
               </span>
-              <span
-                class="text-xs font-semibold"
-                :class="product.stock === 0 ? 'text-gray-400' : 'text-gray-500'"
-              >
+              <span class="text-xs font-semibold" :class="product.stock === 0 ? 'text-gray-400' : 'text-gray-500'">
                 Stok: {{ product.stock }}
               </span>
             </div>
@@ -136,13 +128,8 @@
         <p class="text-gray-600 mb-4">
           Total: Rp {{ formatCurrency(lastTransaction?.total_amount || 0) }}
         </p>
-        <a
-          v-if="lastTransaction?.id"
-          :href="`/print?id=${lastTransaction.id}`"
-          target="_blank"
-          rel="noopener"
-          class="btn-outline w-full mb-2 text-center block"
-        >
+        <a v-if="lastTransaction?.id" :href="`/print?id=${lastTransaction.id}`" target="_blank" rel="noopener"
+          class="btn-outline w-full mb-2 text-center block">
           🖨️ Print Invoice
         </a>
         <button @click="showSuccessModal = false" class="btn-primary w-full">
@@ -178,6 +165,14 @@ const handleSearch = async () => {
   } else {
     filteredProducts.value = products.value
   }
+}
+
+
+function canAddToCart(product) {
+  if (product.stock === 0) return false
+  const item = cart.value.find(i => i.product.id === product.id)
+  if (item && item.quantity >= product.stock) return false
+  return true
 }
 
 
