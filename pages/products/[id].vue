@@ -26,12 +26,16 @@
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Harga</label>
-        <input v-model="form.price" type="number" step="0.01" required class="input-field" />
+        <input :value="formatCurrencyInput(form.price)" @input="onPriceInput($event)" type="text" inputmode="numeric"
+          required class="input-field" />
+        <p v-if="priceError" class="text-xs text-red-500 mt-1">Harga tidak boleh negatif</p>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Stok</label>
-        <input v-model="form.stock" type="number" required class="input-field" />
+        <input v-model.number="form.stock" type="number" min="0" required class="input-field" />
+        <p v-if="stockError" class="text-xs text-red-500 mt-1">Stok tidak boleh negatif</p>
       </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
         <textarea v-model="form.description" rows="3" class="input-field"></textarea>
@@ -68,6 +72,24 @@ const form = ref({
   image_url: ''
 })
 
+const priceError = ref(false)
+const stockError = ref(false)
+
+function formatCurrencyInput(val) {
+  if (val === '' || val === null || val === undefined) return ''
+  const num = Number(val.toString().replace(/\D/g, ''))
+  return num.toLocaleString('id-ID')
+}
+
+function onPriceInput(e) {
+  let raw = e.target.value.replace(/\D/g, '')
+  let num = Number(raw)
+  if (isNaN(num)) num = 0
+  form.value.price = num
+  e.target.value = formatCurrencyInput(num)
+  priceError.value = num < 0
+}
+
 onMounted(async () => {
   if (isEdit.value) {
     await fetchProducts()
@@ -100,6 +122,12 @@ function handleImageChange(e) {
 }
 
 const submitForm = async () => {
+  priceError.value = form.value.price < 0
+  stockError.value = form.value.stock < 0
+  if (priceError.value || stockError.value) {
+    alert('Harga dan stok tidak boleh negatif!')
+    return
+  }
   try {
     submitting.value = true
     let imageUrl = form.value.image_url
